@@ -17,16 +17,14 @@
 
     // 创建BNRHypnosisView对象
     CGRect firstFrame = CGRectMake(160, 240, 100, 150);
+    //CGRect firstFrame = self.window.bounds;
     BNRHypnosisView *firstView = [[BNRHypnosisView alloc] initWithFrame:firstFrame];
-    firstView.backgroundColor = [UIColor redColor];
     [self.window addSubview:firstView];
 
-    CGRect secondFrame = CGRectMake(20, 30, 50, 50);
-    BNRHypnosisView *secondView = [[BNRHypnosisView alloc] initWithFrame:secondFrame];
-    secondView.backgroundColor = [UIColor blueColor];
-    [self.window addSubview:secondView];
-
-    [firstView addSubview: secondView];
+    NSLog(@"%f %f %f %f", firstView.bounds.origin.x, firstView.bounds.origin.y,
+          firstView.bounds.size.height, firstView.bounds.size.width);
+    NSLog(@"%f %f %f %f", firstView.frame.origin.x, firstView.frame.origin.y,
+          firstView.frame.size.height, firstView.frame.size.width);
 
     // Override point for customization after application launch.
     self.window.backgroundColor = [UIColor whiteColor];
