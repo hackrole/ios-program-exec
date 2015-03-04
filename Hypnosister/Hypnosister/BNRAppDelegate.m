@@ -15,16 +15,28 @@
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
 
-    // 创建BNRHypnosisView对象
-    CGRect firstFrame = CGRectMake(160, 240, 100, 150);
-    //CGRect firstFrame = self.window.bounds;
-    BNRHypnosisView *firstView = [[BNRHypnosisView alloc] initWithFrame:firstFrame];
-    [self.window addSubview:firstView];
+    // 创建两个CGRect对象
+    CGRect screenRect = self.window.bounds;
+    CGRect bigRect = screenRect;
+    bigRect.size.width *= 2.0;
 
-    NSLog(@"%f %f %f %f", firstView.bounds.origin.x, firstView.bounds.origin.y,
-          firstView.bounds.size.height, firstView.bounds.size.width);
-    NSLog(@"%f %f %f %f", firstView.frame.origin.x, firstView.frame.origin.y,
-          firstView.frame.size.height, firstView.frame.size.width);
+    // 创建一个UIScrollView对象, 将其尺寸设置为窗口大小
+    UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:screenRect];
+
+    [self.window addSubview:scrollView];
+
+    // 创建一个BNRHypnosisView对象
+    BNRHypnosisView *hypnosisView = [[BNRHypnosisView alloc] initWithFrame:screenRect];
+    scrollView.pagingEnabled = YES;
+    [scrollView addSubview:hypnosisView];
+
+    // 创建第二个BNRHypnosisView对象
+    screenRect.origin.x += screenRect.size.width;
+    BNRHypnosisView *anotherView = [[BNRHypnosisView alloc] initWithFrame:screenRect];
+    [scrollView addSubview:anotherView];
+
+    //告诉UIScrollView对象范围
+    scrollView.contentSize = bigRect.size;
 
     // Override point for customization after application launch.
     self.window.backgroundColor = [UIColor whiteColor];
