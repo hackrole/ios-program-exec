@@ -10,29 +10,29 @@
 	<string>HypnoNerd</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
-		<key>2972C8CC-99A7-4667-AD44-ED629710169D</key>
-		<string>ssh://github.com/hackrole/ios-program-exec.git</string>
+		<key>9E851B04D74F815929039BF0E006704D198F84D9</key>
+		<string>github.com:hackrole/ios-program-exec.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>HypnoNerd/HypnoNerd.xcodeproj/project.xcworkspace</string>
+	<string>HypnoNerd/HypnoNerd.xcodeproj</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
-		<key>2972C8CC-99A7-4667-AD44-ED629710169D</key>
+		<key>9E851B04D74F815929039BF0E006704D198F84D9</key>
 		<string>../../..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
-	<string>ssh://github.com/hackrole/ios-program-exec.git</string>
+	<string>github.com:hackrole/ios-program-exec.git</string>
 	<key>IDESourceControlProjectVersion</key>
-	<integer>110</integer>
+	<integer>111</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
-	<string>2972C8CC-99A7-4667-AD44-ED629710169D</string>
+	<string>9E851B04D74F815929039BF0E006704D198F84D9</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>2972C8CC-99A7-4667-AD44-ED629710169D</string>
+			<string>9E851B04D74F815929039BF0E006704D198F84D9</string>
 			<key>IDESourceControlWCCName</key>
 			<string>ios_program_execs</string>
 		</dict>
