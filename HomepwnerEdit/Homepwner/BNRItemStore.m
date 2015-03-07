@@ -37,6 +37,11 @@
     return nil;
 }
 
+- (void)removeItem:(BNRItem *)item
+{
+    [self.privateItems removeObjectIdenticalTo:item];
+}
+
 // 重写的初始化方法
 - (instancetype)initPrivate
 {
@@ -46,6 +51,17 @@
         _privateItems = [[NSMutableArray alloc] init];
     }
     return self;
+}
+
+- (void)moveItemAtIndex:(NSUInteger)fromIndex toIndex:(NSUInteger)toIndex
+{
+    if (fromIndex == toIndex) {
+        return;
+    }
+    // 移动行
+    BNRItem *item = self.privateItems[fromIndex];
+    [self.privateItems removeObjectAtIndex:fromIndex];
+    [self.privateItems insertObject:item atIndex:toIndex];
 }
 
 - (BNRItem *)createItem
