@@ -57,6 +57,11 @@
         _dateCreated = [[NSDate alloc] init];
     }
 
+    // iamge uuid
+    NSUUID *uuid = [[NSUUID alloc] init];
+    NSString *key = [uuid UUIDString];
+    _itemKey = key;
+
     // 返回对象
     return self;
 

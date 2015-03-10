@@ -16,6 +16,8 @@
     NSDate *_dateCreated;
 }
 
+@property (nonatomic, copy) NSString *itemKey;
+
 - (void)setItemName:(NSString *)str;
 - (NSString *)itemName;
 
@@ -36,6 +38,5 @@
 - (instancetype)initWithItemName:(NSString *)name;
 
 + (instancetype)randomItem;
-
 
 @end
