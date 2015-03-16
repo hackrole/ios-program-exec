@@ -62,6 +62,7 @@
 
         [self.finishedLines addObject:line];
         [self.linesInProcess removeObjectForKey:key];
+
     }
 
     [self setNeedsDisplay];
@@ -246,5 +247,6 @@
     }
     return nil;
 }
+
 
 @end
