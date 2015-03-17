@@ -25,8 +25,11 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
 
     self.webViewController.title = courses[@"title"];
     self.webViewController.URL = URL;
-    [self.navigationController pushViewController:self.webViewController
-                                         animated:YES];
+
+    if (!self.splitViewController) {
+        [self.navigationController pushViewController:self.webViewController
+                                             animated:YES];
+    }
 }
 
 - (NSInteger)tableView:(UITableView *)tableView
@@ -49,13 +52,16 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
 
 - (void)fetchFeed
 {
-    NSString *requestString = @"https://bookapi.bignerdranch.com/private/courses.json";
+    NSString *requestString = [@"https://bookapi.bignerdranch.com/private/courses.json"
+                               stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     NSURL *url = [NSURL URLWithString:requestString];
     NSURLRequest *req = [NSURLRequest requestWithURL:url];
 
     NSURLSessionDataTask *dataTask = [self.session dataTaskWithRequest:req
                                                      completionHandler:
                                       ^(NSData *data, NSURLResponse *response, NSError *error){
+                                          NSLog(@"%@", response);
+                                          NSLog(@"%@", error);
                                           NSDictionary *jsonObject =
                                           [NSJSONSerialization JSONObjectWithData:data
                                                                           options:0

@@ -25,7 +25,19 @@
     BNRWebViewController *wvc = [[BNRWebViewController alloc] init];
     cvc.webViewController = wvc;
 
-    self.window.rootViewController = masterNav;
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+        // 必须将webview包含再视图控制器中
+        UINavigationController *detailnav =
+        [[UINavigationController alloc] initWithRootViewController:wvc];
+
+        UISplitViewController *svc = [[UISplitViewController alloc] init];
+        svc.delegate = wvc;
+        svc.viewControllers = @[masterNav, detailnav];
+
+        self.window.rootViewController = svc;
+    } else {
+        self.window.rootViewController = masterNav;
+    }
 
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
