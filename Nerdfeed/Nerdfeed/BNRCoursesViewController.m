@@ -26,10 +26,10 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     self.webViewController.title = courses[@"title"];
     self.webViewController.URL = URL;
 
-    if (!self.splitViewController) {
-        [self.navigationController pushViewController:self.webViewController
-                                             animated:YES];
-    }
+    NSLog(@"%@", URL);
+
+    [self.navigationController pushViewController:self.webViewController
+                                         animated:YES];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView
@@ -52,9 +52,10 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
 
 - (void)fetchFeed
 {
-    NSString *requestString = [@"https://bookapi.bignerdranch.com/private/courses.json"
-                               stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    NSString *requestString = @"https://bookapi.bignerdranch.com/private/courses.json";
+
     NSURL *url = [NSURL URLWithString:requestString];
+
     NSURLRequest *req = [NSURLRequest requestWithURL:url];
 
     NSURLSessionDataTask *dataTask = [self.session dataTaskWithRequest:req
@@ -111,7 +112,7 @@ didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
                                                        password:@"AchieveNerdvana"
                                                     persistence:NSURLCredentialPersistenceForSession];
 
-    completionHandler(NSURLSessionAuthChallengeCancelAuthenticationChallenge, cred);
+    completionHandler(NSURLSessionAuthChallengeUseCredential, cred);
 }
 
 @end
