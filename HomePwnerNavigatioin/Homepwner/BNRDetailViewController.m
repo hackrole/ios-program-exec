@@ -11,7 +11,8 @@
 #import "BNRImageStore.h"
 
 @interface BNRDetailViewController ()
-    <UINavigationControllerDelegate, UIImagePickerControllerDelegate>
+    <UINavigationControllerDelegate, UIImagePickerControllerDelegate,
+      UITextFieldDelegate>
 
 @property (weak, nonatomic) IBOutlet UITextField *nameField;
 @property (weak, nonatomic) IBOutlet UITextField *serialNumberField;
@@ -35,6 +36,9 @@
 
     [self dismissViewControllerAnimated:YES completion:nil];
 }
+- (IBAction)backgroundTapped:(id)sender {
+    [self.view endEditing:YES];
+}
 
 - (IBAction)takePicture:(id)sender
 {
@@ -52,19 +56,16 @@
     [self presentViewController:imagePicker animated:YES completion:nil];
 }
 
+-(BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    [textField resignFirstResponder];
+    return YES;
+}
+
 - (void)setItem:(BNRItem *)item
 {
     _item = item;
     self.navigationItem.title = item.itemName;
-}
-
-- (void)removeItem: (BNRItem *)item
-{
-    NSString *key = item.itemKey;
-
-    [[BNRImageStore sharedStore] deleteImgeForKey:key];
-
-    [self.privateItems removeObjectIdenticalTo:item];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -86,6 +87,11 @@
     }
     self.dateLabel.text = [dateFormatter stringFromDate:item.dateCreated];
 
+    NSString *itemKey = self.item.itemKey;
+
+    UIImage *imageToDisplay = [[BNRImageStore sharedStore] imageForKey:itemKey];
+
+    self.imageView.image = imageToDisplay;
 }
 
 - (void)viewWillDisappear:(BOOL)animated

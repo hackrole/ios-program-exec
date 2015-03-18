@@ -56,7 +56,7 @@
     return self.dictionary[key];
 }
 
-- (void)deleteImgeForKey:(NSString *)key
+- (void)deleteImageForKey:(NSString *)key
 {
     if (!key) {
         return;
