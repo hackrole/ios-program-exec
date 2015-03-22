@@ -12,6 +12,8 @@
 
 @interface BNRItemsViewController ()
 
+@property (nonatomic) UIImageView *imageView;
+
 @end
 
 @implementation BNRItemsViewController
@@ -135,7 +137,18 @@ moveRowAtIndexPath:(NSIndexPath *)sourceIndexPath
 {
     [super viewDidLoad];
 
-    [self.tableView registerClass:[UITableViewCell class]
-           forCellReuseIdentifier:@"UITableViewCell"];
+    UIImageView *iv = [[UIImageView alloc] initWithImage:nil];
+
+    // 设置缩放模式
+    iv.contentMode = UIViewContentModeScaleAspectFit;
+    iv.translatesAutoresizingMaskIntoConstraints = NO;
+
+    [self.view addSubview:iv];
+
+    self.imageView = iv;
+
+    NSDictionary *nameMap = @{ @"imageView": self.imageView,
+                               @"dateLabel": self.dateLabel,
+                               @"toolbar": self.toolbar};
 }
 @end
