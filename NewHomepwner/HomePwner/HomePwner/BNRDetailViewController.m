@@ -9,9 +9,10 @@
 #import "BNRDetailViewController.h"
 #import "BNRItem.h"
 #import "BNRImageStore.h"
+#import "BNRItemStore.h"
 
 @interface BNRDetailViewController () <UINavigationControllerDelegate, UIImagePickerControllerDelegate,
-    UITextFieldDelegate>
+    UITextFieldDelegate, UIPopoverControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet UITextField *nameField;
 @property (weak, nonatomic) IBOutlet UITextField *serialNumberField;
@@ -19,6 +20,9 @@
 @property (weak, nonatomic) IBOutlet UILabel *dateLabel;
 @property (weak, nonatomic) IBOutlet UIImageView *imageView;
 @property (weak, nonatomic) IBOutlet UIToolbar *toolbar;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *cameraButton;
+@property (strong, nonatomic) UIPopoverController *imagePickerPopover;
+
 
 - (IBAction)takePicture:(id)sender;
 - (IBAction)backgroundTapped:(id)sender;
@@ -30,6 +34,10 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+
+    UIInterfaceOrientation io = [[UIApplication sharedApplication]
+                                 statusBarOrientation];
+    [self prepareViewsForOrientation:io];
 
     BNRItem *item = self.item;
 
@@ -114,6 +122,27 @@
     item.valueInDollars = [self.valueField.text intValue];
 }
 
+- (void)prepareViewsForOrientation:(UIInterfaceOrientation)origentation
+{
+    if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad){
+        return;
+    }
+
+    if (UIInterfaceOrientationIsLandscape(origentation)) {
+        self.imageView.hidden = YES;
+        self.cameraButton.enabled = NO;
+    }else{
+        self.imageView.hidden = NO;
+        self.cameraButton.enabled = YES;
+    }
+}
+
+- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
+                                         duration:(NSTimeInterval)duration
+{
+    [self prepareViewsForOrientation:toInterfaceOrientation];
+}
+
 - (void)setItem:(BNRItem *)item
 {
     _item = item;
@@ -122,6 +151,11 @@
 
 - (IBAction)takePicture:(id)sender
 {
+    if ([self.imagePickerPopover isPopoverVisible]) {
+        [self.imagePickerPopover dismissPopoverAnimated:YES];
+        self.imagePickerPopover = nil;
+        return;
+    }
     UIImagePickerController *imagePicker = [[UIImagePickerController alloc] init];
 
     // If the device ahs a camera, take a picture, otherwise,
@@ -135,7 +169,72 @@
     imagePicker.delegate = self;
 
     // Place image picker on the screen
-    [self presentViewController:imagePicker animated:YES completion:NULL];
+    imagePicker.delegate = self;
+
+    if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad) {
+        self.imagePickerPopover = [[UIPopoverController alloc]
+                                   initWithContentViewController:imagePicker];
+
+        self.imagePickerPopover.delegate = self;
+
+        [self.imagePickerPopover presentPopoverFromBarButtonItem:sender
+                                        permittedArrowDirections:UIPopoverArrowDirectionAny
+                                                        animated:YES];
+    }else{
+        [self presentViewController:imagePicker animated:YES completion:nil];
+    }
+}
+
+- (instancetype)initForNewItem:(BOOL)isNew
+{
+    self = [super initWithNibName:nil bundle:nil];
+
+    if (self) {
+        if (isNew) {
+            UIBarButtonItem *doneItem = [[UIBarButtonItem alloc]
+                                         initWithBarButtonSystemItem:UIBarButtonSystemItemDone
+                                         target:self
+                                         action:@selector(save:)];
+            self.navigationItem.rightBarButtonItem = doneItem;
+
+            UIBarButtonItem *cancleItem = [[UIBarButtonItem alloc]
+                                           initWithBarButtonSystemItem:UIBarButtonSystemItemCancel
+                                           target:self
+                                           action:@selector(cancel:)];
+            self.navigationItem.leftBarButtonItem = cancleItem;
+        }
+    }
+
+    return self;
+}
+
+- (void)save:(id)sender
+{
+    [self.presentingViewController dismissViewControllerAnimated:YES
+                                                     completion:self.dismissBlock];
+}
+
+- (void)cancel:(id)sender
+{
+    [[BNRItemStore sharedStore] removeItem:self.item];
+
+    [self.presentingViewController dismissViewControllerAnimated:YES
+                                                     completion:self.dismissBlock];
+}
+
+- (instancetype)initWithNibName:(NSString *)nibNameOrNil
+                         bundle:(NSBundle *)nibBundleOrNil
+{
+    @throw [NSException exceptionWithName:@"Wrong initializer"
+                                   reason:@"Use initForNewItem"
+                                 userInfo:nil];
+    return nil;
+}
+
+- (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController
+{
+    NSLog(@"User dismissed popver");
+    self.imagePickerPopover = nil;
 }
 
 - (IBAction)backgroundTapped:(id)sender
@@ -165,7 +264,12 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
 
     // Take image picker off the screen -
     // you must call this dismiss method
-    [self dismissViewControllerAnimated:YES completion:NULL];
+    if (self.imagePickerPopover) {
+        [self.imagePickerPopover dismissPopoverAnimated:YES];
+        self.imagePickerPopover = nil;
+    }else{
+        [self dismissViewControllerAnimated:YES completion:nil];
+    }
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
