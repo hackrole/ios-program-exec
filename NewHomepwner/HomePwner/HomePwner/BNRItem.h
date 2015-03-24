@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface BNRItem : NSObject
+@interface BNRItem : NSObject <NSCoding>
 
 + (instancetype)randomItem;
 
@@ -22,5 +22,9 @@
 @property (nonatomic, readonly, strong) NSDate *dateCreated;
 
 @property (nonatomic, copy) NSString *itemKey;
+@property (nonatomic, copy) NSString *imageKey;
+@property (nonatomic, strong) UIImage *thumbnail;
+
+- (void)setThumbnail:(UIImage *)thumbnail;
 
 @end
